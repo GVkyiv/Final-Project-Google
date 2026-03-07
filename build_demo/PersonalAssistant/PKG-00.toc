@@ -1,0 +1,63 @@
+('D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+ 'PM\\My Repo\\Final '
+ 'Project\\build_demo\\PersonalAssistant\\PersonalAssistant.pkg',
+ {'BINARY': True,
+  'DATA': True,
+  'EXECUTABLE': True,
+  'EXTENSION': True,
+  'PYMODULE': True,
+  'PYSOURCE': True,
+  'PYZ': False,
+  'SPLASH': True,
+  'SYMLINK': False},
+ [('pyi-contents-directory _internal', '', 'OPTION'),
+  ('PYZ-00.pyz',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project\\build_demo\\PersonalAssistant\\PYZ-00.pyz',
+   'PYZ'),
+  ('struct',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final '
+   'Project\\build_demo\\PersonalAssistant\\localpycs\\struct.pyc',
+   'PYMODULE'),
+  ('pyimod01_archive',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final '
+   'Project\\build_demo\\PersonalAssistant\\localpycs\\pyimod01_archive.pyc',
+   'PYMODULE'),
+  ('pyimod02_importers',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final '
+   'Project\\build_demo\\PersonalAssistant\\localpycs\\pyimod02_importers.pyc',
+   'PYMODULE'),
+  ('pyimod03_ctypes',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final '
+   'Project\\build_demo\\PersonalAssistant\\localpycs\\pyimod03_ctypes.pyc',
+   'PYMODULE'),
+  ('pyimod04_pywin32',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final '
+   'Project\\build_demo\\PersonalAssistant\\localpycs\\pyimod04_pywin32.pyc',
+   'PYMODULE'),
+  ('pyiboot01_bootstrap',
+   'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'PYSOURCE'),
+  ('pyi_rth_inspect',
+   'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth__tkinter',
+   'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
+   'PYSOURCE'),
+  ('gui',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project\\gui.py',
+   'PYSOURCE')],
+ 'python314.DLL',
+ True,
+ False,
+ False,
+ [],
+ None,
+ None,
+ None)
