@@ -1,7 +1,8 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import re
 
+from .exceptions import ValidationError
 from .utils import DATE_FORMAT, parse_date
 
 LEGACY_PHONE_PATTERN = re.compile(r"^\+?[0-9\-\s\(\)]{7,20}$")
@@ -14,28 +15,28 @@ BIRTHDAY_PATTERN = re.compile(r"^\d{2}/\d{2}/\d{4}$")
 def validate_required(value: str, field_name: str) -> str:
     prepared = value.strip()
     if not prepared:
-        raise ValueError(f"{field_name} is required.")
+        raise ValidationError(f"{field_name} is required.")
     return prepared
 
 
 def validate_country_phone_code(code: str) -> str:
     prepared = code.strip()
     if not PHONE_CODE_PATTERN.fullmatch(prepared):
-        raise ValueError("Invalid country phone code. Use format +123.")
+        raise ValidationError("Invalid country phone code. Use format +123.")
     return prepared
 
 
 def validate_phone_number(phone_number: str) -> str:
     prepared = phone_number.strip()
     if not PHONE_NUMBER_ALLOWED_PATTERN.fullmatch(prepared):
-        raise ValueError("Invalid phone number. Use digits, spaces, parentheses or hyphen.")
+        raise ValidationError("Invalid phone number. Use digits, spaces, parentheses or hyphen.")
 
     normalized = re.sub(r"[\s\-\(\)]", "", prepared)
     if not normalized.isdigit():
-        raise ValueError("Invalid phone number. Use digits only in the number part.")
+        raise ValidationError("Invalid phone number. Use digits only in the number part.")
 
     if len(normalized) < 5 or len(normalized) > 15:
-        raise ValueError("Phone number should contain from 5 to 15 digits.")
+        raise ValidationError("Phone number should contain from 5 to 15 digits.")
 
     return normalized
 
@@ -44,7 +45,7 @@ def validate_phone(phone: str) -> str:
     """Legacy validator kept for CLI compatibility with --phone values."""
     prepared = phone.strip()
     if not LEGACY_PHONE_PATTERN.fullmatch(prepared):
-        raise ValueError(f"Invalid phone number: {phone}")
+        raise ValidationError(f"Invalid phone number: {phone}")
 
     if prepared.startswith("+"):
         parts = prepared.split(maxsplit=1)
@@ -65,18 +66,19 @@ def validate_phone(phone: str) -> str:
 def validate_email(email: str) -> str:
     prepared = email.strip()
     if not EMAIL_PATTERN.fullmatch(prepared):
-        raise ValueError(f"Invalid email: {email}")
+        raise ValidationError(f"Invalid email: {email}")
     return prepared
 
 
 def validate_birthday(birthday: str) -> str:
     prepared = birthday.strip()
     if not BIRTHDAY_PATTERN.fullmatch(prepared):
-        raise ValueError(f"Invalid birthday format: {birthday}. Use {DATE_FORMAT}.")
+        raise ValidationError(f"Invalid birthday format: {birthday}. Use {DATE_FORMAT}.")
 
     try:
         parse_date(prepared)
     except ValueError as exc:
-        raise ValueError(f"Invalid birthday value: {birthday}. Use {DATE_FORMAT}.") from exc
+        raise ValidationError(f"Invalid birthday value: {birthday}. Use {DATE_FORMAT}.") from exc
 
     return prepared
+

@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import re
 from dataclasses import asdict, dataclass, field
@@ -8,6 +8,7 @@ from .utils import ensure_list_of_strings, normalize_birthday, normalize_tags, n
 
 
 def _split_legacy_phone(raw_phone: str) -> Tuple[str, str]:
+    """Helper for reading legacy files."""
     prepared = str(raw_phone or "").strip()
     if not prepared:
         return "", ""
@@ -25,6 +26,7 @@ def _split_legacy_phone(raw_phone: str) -> Tuple[str, str]:
 
 
 def _compose_phone(code: str, number: str) -> str:
+    """Helper for reading legacy files."""
     prepared_code = str(code or "").strip()
     prepared_number = re.sub(r"[^0-9]", "", str(number or ""))
     if prepared_code and prepared_number:
@@ -55,35 +57,31 @@ class Contact:
     created_at: str = field(default_factory=now_iso)
     updated_at: str = field(default_factory=now_iso)
 
+    def __post_init__(self):
+        self.first_name = self.first_name.strip()
+        self.last_name = self.last_name.strip()
+        self.country = self.country.strip()
+        self.phone_number = self.phone_number.strip()
+        if self.email:
+            self.email = self.email.strip()
+        if self.address:
+            self.address = self.address.strip()
+        if self.birthday:
+            self.birthday = self.birthday.strip()
+
     @property
     def display_name(self) -> str:
-        parts = [self.first_name.strip(), self.last_name.strip()]
+        parts = [self.first_name, self.last_name]
         return " ".join(part for part in parts if part)
 
     @property
     def formatted_phone(self) -> str:
-        return self.phone_number.strip()
+        return self.phone_number
 
-    # Legacy compatibility for old code paths that still reference contact.name / contact.phones.
+    # Legacy compatibility, mainly for CLI code reading older Contact formats
     @property
     def name(self) -> str:
         return self.display_name or self.first_name
-
-    @name.setter
-    def name(self, value: str) -> None:
-        self.first_name = str(value or "").strip()
-
-    @property
-    def phones(self) -> List[str]:
-        return [self.formatted_phone] if self.formatted_phone else []
-
-    @phones.setter
-    def phones(self, values: List[str]) -> None:
-        if not values:
-            self.phone_number = ""
-            return
-        code, number = _split_legacy_phone(values[0])
-        self.phone_number = _compose_phone(code, number)
 
     @classmethod
     def from_dict(cls, raw: Dict[str, object], fallback_id: int) -> "Contact":
@@ -155,6 +153,10 @@ class Note:
     color_label: str = "default"
     created_at: str = field(default_factory=now_iso)
     updated_at: str = field(default_factory=now_iso)
+
+    def __post_init__(self):
+        self.title = self.title.strip()
+        self.content = self.content.strip()
 
     @classmethod
     def from_dict(cls, raw: Dict[str, object], fallback_id: int) -> "Note":

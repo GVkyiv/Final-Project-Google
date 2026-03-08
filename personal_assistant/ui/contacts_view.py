@@ -5,6 +5,7 @@ from tkinter import ttk
 
 import customtkinter as ctk
 
+from ..app.exceptions import ValidationError
 from . import dialogs
 
 
@@ -34,8 +35,8 @@ class ContactsView(ctk.CTkFrame):
 
         self._country_display_to_internal: dict[str, str] = {}
         self._country_internal_to_display: dict[str, str] = {}
-        self._syncing_table_selection = False
 
+        self._syncing_table_selection = False
         self._birthday_updating = False
         self.birthday_var.trace_add("write", self._on_birthday_text_changed)
 
@@ -44,6 +45,7 @@ class ContactsView(ctk.CTkFrame):
         self.grid_rowconfigure(1, weight=1)
 
         self._build_layout()
+        self._create_treeview_styles()
         self.apply_translations()
 
     def _build_layout(self) -> None:
@@ -54,30 +56,48 @@ class ContactsView(ctk.CTkFrame):
         self.controls.grid(row=0, column=0, columnspan=2, sticky="ew", padx=pad, pady=(pad, gap))
         self.controls.grid_columnconfigure(1, weight=1)
 
-        self.query_label = ctk.CTkLabel(self.controls)
-        self.query_label.grid(row=0, column=0, sticky="w", padx=(12, 6), pady=10)
+        self.query_label = ctk.CTkLabel(self.controls, anchor="w")
+        self.query_label.grid(row=0, column=0, sticky="w", padx=(12, 6), pady=(10, 4))
+
         self.query_entry = ctk.CTkEntry(self.controls, textvariable=self.query_var)
-        self.query_entry.grid(row=0, column=1, sticky="ew", padx=(0, 10), pady=10)
-
-        self.filter_label = ctk.CTkLabel(self.controls)
-        self.filter_label.grid(row=0, column=2, sticky="w", padx=(0, 6), pady=10)
-        self.filter_menu = ctk.CTkOptionMenu(self.controls, variable=self.filter_var, values=[], command=self._on_filter_changed)
-        self.filter_menu.grid(row=0, column=3, padx=(0, 10), pady=10)
-
-        self.sort_label = ctk.CTkLabel(self.controls)
-        self.sort_label.grid(row=0, column=4, sticky="w", padx=(0, 6), pady=10)
-        self.sort_menu = ctk.CTkOptionMenu(self.controls, variable=self.sort_var, values=[], command=self._on_sort_changed)
-        self.sort_menu.grid(row=0, column=5, padx=(0, 10), pady=10)
+        self.query_entry.grid(row=0, column=1, sticky="ew", padx=(0, 8), pady=(10, 4))
+        self.query_entry.bind("<KeyRelease>", self._on_search_change)
+        self.query_entry.bind("<Return>", lambda _event: self.refresh())
 
         self.search_button = ctk.CTkButton(self.controls, width=96, command=self.refresh)
-        self.search_button.grid(row=0, column=6, padx=(0, 8), pady=10)
-        self.reset_button = ctk.CTkButton(self.controls, width=96, command=self._reset_filters)
-        self.reset_button.grid(row=0, column=7, padx=(0, 12), pady=10)
+        self.search_button.grid(row=0, column=2, padx=(0, 8), pady=(10, 4))
 
-        self.list_panel = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.corner_radius)
+        self.reset_button = ctk.CTkButton(self.controls, width=96, command=self._reset_filters)
+        self.reset_button.grid(row=0, column=3, padx=(0, 12), pady=(10, 4))
+
+        self.filter_label = ctk.CTkLabel(self.controls, anchor="w")
+        self.filter_label.grid(row=1, column=0, sticky="w", padx=(12, 6), pady=(4, 10))
+
+        self.filter_menu = ctk.CTkOptionMenu(
+            self.controls,
+            variable=self.filter_var,
+            values=[],
+            command=self._on_filter_changed,
+            width=170,
+        )
+        self.filter_menu.grid(row=1, column=1, sticky="w", padx=(0, 8), pady=(4, 10))
+
+        self.sort_label = ctk.CTkLabel(self.controls, anchor="w")
+        self.sort_label.grid(row=1, column=2, sticky="e", padx=(6, 6), pady=(4, 10))
+
+        self.sort_menu = ctk.CTkOptionMenu(
+            self.controls,
+            variable=self.sort_var,
+            values=[],
+            command=self._on_sort_changed,
+            width=170,
+        )
+        self.sort_menu.grid(row=1, column=3, sticky="w", padx=(0, 12), pady=(4, 10))
+
+        self.list_panel = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.list_panel.grid(row=1, column=0, sticky="nsew", padx=(pad, gap), pady=(0, pad))
-        self.list_panel.grid_rowconfigure(1, weight=1)
         self.list_panel.grid_columnconfigure(0, weight=1)
+        self.list_panel.grid_rowconfigure(1, weight=1)
 
         self.list_title = ctk.CTkLabel(self.list_panel, font=("Segoe UI Semibold", 16), anchor="w")
         self.list_title.grid(row=0, column=0, sticky="ew", padx=12, pady=(10, 4))
@@ -94,8 +114,8 @@ class ContactsView(ctk.CTkFrame):
             selectmode="browse",
         )
         self.table.grid(row=0, column=0, sticky="nsew")
-        self.table.column("first_name", width=140, anchor="w", stretch=True)
-        self.table.column("last_name", width=140, anchor="w", stretch=True)
+        self.table.column("first_name", width=160, anchor="w", stretch=True)
+        self.table.column("last_name", width=160, anchor="w", stretch=True)
         self.table.column("country", width=150, anchor="w", stretch=True)
         self.table.column("phone", width=170, anchor="w", stretch=True)
         self.table.column("email", width=220, anchor="w", stretch=True)
@@ -106,25 +126,24 @@ class ContactsView(ctk.CTkFrame):
         self.table_scrollbar.grid(row=0, column=1, sticky="ns", padx=(6, 0))
         self.table.configure(yscrollcommand=self.table_scrollbar.set)
 
-        self.form = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.corner_radius)
+        self.form = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.form.grid(row=1, column=1, sticky="nsew", padx=(0, pad), pady=(0, pad))
         self.form.grid_columnconfigure(1, weight=1)
-        self.form.grid_rowconfigure(8, weight=1)
 
         self.form_title = ctk.CTkLabel(self.form, font=("Segoe UI Semibold", 16), anchor="w")
         self.form_title.grid(row=0, column=0, columnspan=2, sticky="ew", padx=12, pady=(10, 8))
 
-        self.first_name_label = ctk.CTkLabel(self.form)
+        self.first_name_label = ctk.CTkLabel(self.form, anchor="w")
         self.first_name_label.grid(row=1, column=0, sticky="w", padx=(12, 6), pady=4)
         self.first_name_entry = ctk.CTkEntry(self.form, textvariable=self.first_name_var)
         self.first_name_entry.grid(row=1, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.last_name_label = ctk.CTkLabel(self.form)
+        self.last_name_label = ctk.CTkLabel(self.form, anchor="w")
         self.last_name_label.grid(row=2, column=0, sticky="w", padx=(12, 6), pady=4)
         self.last_name_entry = ctk.CTkEntry(self.form, textvariable=self.last_name_var)
         self.last_name_entry.grid(row=2, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.country_label = ctk.CTkLabel(self.form)
+        self.country_label = ctk.CTkLabel(self.form, anchor="w")
         self.country_label.grid(row=3, column=0, sticky="w", padx=(12, 6), pady=4)
         self.country_combo = ctk.CTkComboBox(
             self.form,
@@ -135,22 +154,22 @@ class ContactsView(ctk.CTkFrame):
         )
         self.country_combo.grid(row=3, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.phone_number_label = ctk.CTkLabel(self.form)
+        self.phone_number_label = ctk.CTkLabel(self.form, anchor="w")
         self.phone_number_label.grid(row=4, column=0, sticky="w", padx=(12, 6), pady=4)
         self.phone_number_entry = ctk.CTkEntry(self.form, textvariable=self.phone_number_var)
         self.phone_number_entry.grid(row=4, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.email_label = ctk.CTkLabel(self.form)
+        self.email_label = ctk.CTkLabel(self.form, anchor="w")
         self.email_label.grid(row=5, column=0, sticky="w", padx=(12, 6), pady=4)
         self.email_entry = ctk.CTkEntry(self.form, textvariable=self.email_var)
         self.email_entry.grid(row=5, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.address_label = ctk.CTkLabel(self.form)
+        self.address_label = ctk.CTkLabel(self.form, anchor="w")
         self.address_label.grid(row=6, column=0, sticky="w", padx=(12, 6), pady=4)
         self.address_entry = ctk.CTkEntry(self.form, textvariable=self.address_var)
         self.address_entry.grid(row=6, column=1, sticky="ew", padx=(0, 12), pady=4)
 
-        self.birthday_label = ctk.CTkLabel(self.form)
+        self.birthday_label = ctk.CTkLabel(self.form, anchor="w")
         self.birthday_label.grid(row=7, column=0, sticky="w", padx=(12, 6), pady=4)
         self.birthday_entry = ctk.CTkEntry(self.form, textvariable=self.birthday_var)
         self.birthday_entry.grid(row=7, column=1, sticky="ew", padx=(0, 12), pady=4)
@@ -158,7 +177,7 @@ class ContactsView(ctk.CTkFrame):
         self.favorite_check = ctk.CTkCheckBox(self.form, variable=self.favorite_var, onvalue=True, offvalue=False)
         self.favorite_check.grid(row=8, column=1, sticky="w", padx=(0, 12), pady=4)
 
-        self.comment_label = ctk.CTkLabel(self.form)
+        self.comment_label = ctk.CTkLabel(self.form, anchor="w")
         self.comment_label.grid(row=9, column=0, sticky="nw", padx=(12, 6), pady=4)
         self.comment_text = ctk.CTkTextbox(self.form, height=110)
         self.comment_text.grid(row=9, column=1, sticky="nsew", padx=(0, 12), pady=4)
@@ -170,20 +189,40 @@ class ContactsView(ctk.CTkFrame):
 
         self.add_button = ctk.CTkButton(self.button_row, command=self.add_contact_and_new)
         self.add_button.grid(row=0, column=0, padx=4, pady=4, sticky="ew")
+
         self.save_button = ctk.CTkButton(self.button_row, command=self.save_contact)
         self.save_button.grid(row=0, column=1, padx=4, pady=4, sticky="ew")
-        self.delete_button = ctk.CTkButton(self.button_row, command=self.delete_contact)
+
+        self.delete_button = ctk.CTkButton(
+            self.button_row,
+            command=self.delete_contact,
+            fg_color="#EF4444",
+            hover_color="#DC2626",
+            text_color="#FFFFFF",
+        )
         self.delete_button.grid(row=0, column=2, padx=4, pady=4, sticky="ew")
 
         self.copy_phone_button = ctk.CTkButton(self.button_row, command=self.copy_phone)
         self.copy_phone_button.grid(row=1, column=0, padx=4, pady=4, sticky="ew")
+
         self.copy_email_button = ctk.CTkButton(self.button_row, command=self.copy_email)
         self.copy_email_button.grid(row=1, column=1, padx=4, pady=4, sticky="ew")
+
         self.toggle_favorite_button = ctk.CTkButton(self.button_row, command=self.toggle_favorite)
         self.toggle_favorite_button.grid(row=1, column=2, padx=4, pady=4, sticky="ew")
 
         self.clear_button = ctk.CTkButton(self.button_row, command=self.start_add_contact)
         self.clear_button.grid(row=2, column=0, columnspan=3, padx=4, pady=4, sticky="ew")
+
+    def _create_treeview_styles(self) -> None:
+        style = ttk.Style()
+        try:
+            style.theme_use("clam")
+        except tk.TclError:
+            pass
+        style.configure("PAContacts.Treeview", rowheight=30, font=("Segoe UI", 11), borderwidth=0)
+        style.configure("PAContacts.Treeview.Heading", font=("Segoe UI", 11, "bold"))
+        self.table.configure(style="PAContacts.Treeview")
 
     def _current_language(self) -> str:
         return self.app.i18n.language if hasattr(self.app, "i18n") else self.app.service.settings.language
@@ -231,6 +270,7 @@ class ContactsView(ctk.CTkFrame):
 
     def apply_translations(self) -> None:
         t = self.app.t
+
         self.query_label.configure(text=t("query"))
         self.filter_label.configure(text=t("filter"))
         self.sort_label.configure(text=t("sort"))
@@ -263,8 +303,6 @@ class ContactsView(ctk.CTkFrame):
         self.toggle_favorite_button.configure(text=t("toggle_favorite"))
         self.clear_button.configure(text=t("clear"))
 
-        self._refresh_country_combo()
-
         filter_options = [
             ("all", t("filter_all")),
             ("favorites", t("filter_favorites")),
@@ -289,9 +327,11 @@ class ContactsView(ctk.CTkFrame):
         selected_sort = next(label for value, label in sort_options if value == self.sort_value)
         self.sort_var.set(selected_sort)
 
+        self._refresh_country_combo()
+
     def refresh(self) -> None:
         contacts = self.app.service.list_contacts(
-            query=self.query_var.get(),
+            query=self.query_var.get().strip(),
             filter_by=self.filter_value,
             sort_by=self.sort_value,
         )
@@ -301,11 +341,13 @@ class ContactsView(ctk.CTkFrame):
 
         if not contacts:
             self.table.insert("", "end", iid="empty", values=(self.app.t("no_contacts"), "", "", "", ""))
+            if self.selected_contact_id is not None:
+                self.start_add_contact()
             return
 
         language = self._current_language()
         for contact in contacts:
-            country = self.app.service.country_to_display(contact.country, language) if contact.country else "-"
+            country_display = self.app.service.country_to_display(contact.country, language) if contact.country else "-"
             self.table.insert(
                 "",
                 "end",
@@ -313,7 +355,7 @@ class ContactsView(ctk.CTkFrame):
                 values=(
                     contact.first_name or "-",
                     contact.last_name or "-",
-                    country,
+                    country_display,
                     self.app.service.get_contact_phone_display(contact) or "-",
                     contact.email or "-",
                 ),
@@ -323,6 +365,9 @@ class ContactsView(ctk.CTkFrame):
             selected_iid = str(self.selected_contact_id)
             if selected_iid in self.table.get_children():
                 self._set_table_selection(selected_iid)
+                self._fill_form(self.selected_contact_id)
+            else:
+                self.start_add_contact()
 
     def _set_table_selection(self, row_id: str) -> None:
         self._syncing_table_selection = True
@@ -351,13 +396,7 @@ class ContactsView(ctk.CTkFrame):
         self._fill_form(int(row_id))
 
     def _on_table_open(self, _event=None) -> None:
-        selected = self.table.selection()
-        if not selected:
-            return
-        row_id = selected[0]
-        if not row_id.isdigit():
-            return
-        self._fill_form(int(row_id))
+        self._on_table_select()
 
     def _on_filter_changed(self, _value: str | None = None) -> None:
         self.filter_value = self._filter_map.get(self.filter_var.get(), "all")
@@ -367,10 +406,14 @@ class ContactsView(ctk.CTkFrame):
         self.sort_value = self._sort_map.get(self.sort_var.get(), "name")
         self.refresh()
 
+    def _on_search_change(self, _event=None) -> None:
+        self.refresh()
+
     def _on_country_changed(self, _value: str | None = None) -> None:
         country_display = self.country_var.get().strip()
         if not country_display:
             return
+
         country_internal = self._country_display_to_internal.get(
             country_display,
             self.app.service.country_from_display(country_display),
@@ -404,20 +447,20 @@ class ContactsView(ctk.CTkFrame):
             contact.country,
             self.app.service.country_to_display(contact.country, language),
         )
-        self.country_var.set(country_display)
+        self.country_var.set(country_display if contact.country else "")
 
         self.phone_number_var.set(contact.phone_number)
         self.email_var.set(contact.email or "")
         self.address_var.set(contact.address or "")
         self.birthday_var.set(contact.birthday or "")
         self.favorite_var.set(contact.favorite)
+
         self.comment_text.delete("1.0", "end")
         self.comment_text.insert("1.0", contact.comment)
 
-
-
     def start_add_contact(self) -> None:
         self.selected_contact_id = None
+
         self.first_name_var.set("")
         self.last_name_var.set("")
         self.country_var.set("")
@@ -426,7 +469,9 @@ class ContactsView(ctk.CTkFrame):
         self.address_var.set("")
         self.birthday_var.set("")
         self.favorite_var.set(False)
+
         self.comment_text.delete("1.0", "end")
+
         self._clear_table_selection()
         self.first_name_entry.focus_set()
 
@@ -464,21 +509,6 @@ class ContactsView(ctk.CTkFrame):
             ]
         )
 
-    def _payload_differs_contact(self, payload: dict, contact) -> bool:
-        return any(
-            [
-                payload["first_name"] != contact.first_name,
-                payload["last_name"] != contact.last_name,
-                payload["country"] != contact.country,
-                payload["phone_number"] != contact.phone_number,
-                (payload["email"] or None) != (contact.email or None),
-                (payload["address"] or None) != (contact.address or None),
-                (payload["birthday"] or None) != (contact.birthday or None),
-                payload["comment"] != contact.comment,
-                bool(payload["favorite"]) != bool(contact.favorite),
-            ]
-        )
-
     def _save_current_contact_if_needed(self):
         payload = self._collect_form()
 
@@ -487,9 +517,6 @@ class ContactsView(ctk.CTkFrame):
                 return None
             return self.app.service.add_contact(**payload)
 
-        contact = self.app.service.get_contact(self.selected_contact_id)
-        if not self._payload_differs_contact(payload, contact):
-            return None
         return self.app.service.update_contact(contact_id=self.selected_contact_id, **payload)
 
     def add_contact_and_new(self) -> None:
@@ -497,8 +524,9 @@ class ContactsView(ctk.CTkFrame):
             contact = self._save_current_contact_if_needed()
             if contact is not None:
                 self.app.notify_status(f"{self.app.t('save')}: {self.app.service.get_contact_display_name(contact)}")
+            self.refresh()
             self.start_add_contact()
-        except ValueError as exc:  # pragma: no cover - GUI runtime
+        except ValidationError as exc:  # pragma: no cover - GUI runtime
             dialogs.show_error(self.app.t("error"), self._localize_error(str(exc)))
         except Exception as exc:  # pragma: no cover - GUI runtime
             dialogs.show_error(self.app.t("error"), str(exc))
@@ -526,7 +554,7 @@ class ContactsView(ctk.CTkFrame):
             self.refresh()
             self.select_contact(contact.id)
             self.app.notify_status(f"{self.app.t('save')}: {self.app.service.get_contact_display_name(contact)}")
-        except ValueError as exc:  # pragma: no cover - GUI runtime
+        except ValidationError as exc:  # pragma: no cover - GUI runtime
             dialogs.show_error(self.app.t("error"), self._localize_error(str(exc)))
         except Exception as exc:  # pragma: no cover - GUI runtime
             dialogs.show_error(self.app.t("error"), str(exc))
@@ -537,6 +565,7 @@ class ContactsView(ctk.CTkFrame):
             return
         if not dialogs.ask_yes_no(self.app.t("info"), self.app.t("confirm_delete_contact")):
             return
+
         try:
             self.app.service.delete_contact(self.selected_contact_id)
             self.start_add_contact()
@@ -548,10 +577,12 @@ class ContactsView(ctk.CTkFrame):
         if self.selected_contact_id is None:
             dialogs.show_info(self.app.t("info"), self.app.t("select_contact_first"))
             return
+
         contact = self.app.service.get_contact(self.selected_contact_id)
         phone = self.app.service.get_contact_phone_display(contact)
         if not phone:
             return
+
         self.clipboard_clear()
         self.clipboard_append(phone)
         self.app.notify_status(self.app.t("copied_to_clipboard"))
@@ -560,9 +591,11 @@ class ContactsView(ctk.CTkFrame):
         if self.selected_contact_id is None:
             dialogs.show_info(self.app.t("info"), self.app.t("select_contact_first"))
             return
+
         contact = self.app.service.get_contact(self.selected_contact_id)
         if not contact.email:
             return
+
         self.clipboard_clear()
         self.clipboard_append(contact.email)
         self.app.notify_status(self.app.t("copied_to_clipboard"))
@@ -571,6 +604,7 @@ class ContactsView(ctk.CTkFrame):
         if self.selected_contact_id is None:
             dialogs.show_info(self.app.t("info"), self.app.t("select_contact_first"))
             return
+
         contact = self.app.service.toggle_contact_favorite(self.selected_contact_id)
         self.favorite_var.set(contact.favorite)
         self.refresh()
@@ -579,10 +613,11 @@ class ContactsView(ctk.CTkFrame):
     def select_contact(self, contact_id: int) -> None:
         self.selected_contact_id = contact_id
         selected_iid = str(contact_id)
+
         if selected_iid not in self.table.get_children():
             self.refresh()
             if selected_iid not in self.table.get_children():
                 return
+
         self._set_table_selection(selected_iid)
         self._fill_form(contact_id)
-

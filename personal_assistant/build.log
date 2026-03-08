@@ -1,0 +1,134 @@
+Starting Python Build...
+179 INFO: PyInstaller: 6.19.0, contrib hooks: 2026.2
+180 INFO: Python: 3.14.3
+211 INFO: Platform: Windows-11-10.0.26100-SP0
+211 INFO: Python environment: C:\Users\User\AppData\Local\Python\pythoncore-3.14-64
+211 INFO: wrote d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\PersonalAssistantDemo.spec
+749 INFO: Module search paths (PYTHONPATH):
+['d:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+ 'PM\\My Repo\\Final Project Google\\personal_assistant',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\python314.zip',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\bin',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages',
+ 'd:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+ 'PM\\My Repo\\Final Project Google']
+1098 INFO: Appending 'datas' from .spec
+1100 INFO: checking Analysis
+1141 INFO: Building because inputs changed
+1141 INFO: Looking for Python shared library...
+1141 INFO: Using Python shared library: C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\python314.DLL
+1141 INFO: Running Analysis Analysis-00.toc
+1142 INFO: Target bytecode optimization level: 0
+1142 INFO: Initializing module dependency graph...
+1143 INFO: Initializing module graph hook caches...
+1158 INFO: Analyzing modules for base_library.zip ...
+3289 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+3780 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+4599 INFO: Processing standard module hook 'hook-difflib.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+4617 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+8268 INFO: Caching module dependency graph...
+8303 INFO: Analyzing d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\gui.py
+8322 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+8323 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+8717 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+8727 INFO: Processing standard module hook 'hook-customtkinter.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+8899 INFO: Processing standard module hook 'hook-platform.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+8958 INFO: Processing standard module hook 'hook-sysconfig.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+8965 INFO: Processing standard module hook 'hook-_ctypes.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+8972 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+8974 INFO: SetuptoolsInfo: initializing cached setuptools info...
+9624 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+10725 INFO: Processing module hooks (post-graph stage)...
+10741 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks'
+10755 INFO: Performing binary vs. data reclassification (987 entries)
+10845 INFO: Looking for ctypes DLLs
+10862 WARNING: Ignoring AppKit.framework/AppKit imported from C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\darkdetect\_mac_detect.py - only basenames are supported with ctypes imports!
+10878 INFO: Analyzing run-time hooks ...
+10879 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+10883 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+10916 INFO: Creating base_library.zip...
+10942 INFO: Looking for dynamic libraries
+11218 INFO: Extra DLL search directories (AddDllDirectory): []
+11218 INFO: Extra DLL search directories (PATH): []
+11461 INFO: Warnings written to d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\warn-PersonalAssistantDemo.txt
+11493 INFO: Graph cross-reference written to d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\xref-PersonalAssistantDemo.html
+11551 INFO: checking PYZ
+11570 INFO: Building because name changed
+11570 INFO: Building PYZ (ZlibArchive) d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\PYZ-00.pyz
+11747 INFO: Building PYZ (ZlibArchive) d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\PYZ-00.pyz completed successfully.
+11759 INFO: checking PKG
+11779 INFO: Building because name changed
+11779 INFO: Building PKG (CArchive) PersonalAssistantDemo.pkg
+11805 INFO: Building PKG (CArchive) PersonalAssistantDemo.pkg completed successfully.
+11806 INFO: Bootloader C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+11807 INFO: checking EXE
+11825 INFO: Building because name changed
+11826 INFO: Building EXE from EXE-00.toc
+11827 INFO: Copying bootloader EXE to d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\PersonalAssistantDemo.exe
+11835 INFO: Copying icon to EXE
+11842 INFO: Copying 0 resources to EXE
+11842 INFO: Embedding manifest in EXE
+11848 INFO: Appending PKG archive to EXE
+11919 INFO: Fixing EXE headers
+12588 INFO: Building EXE from EXE-00.toc completed successfully.
+12598 INFO: checking COLLECT
+12634 INFO: Removing dir d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\dist\PersonalAssistantDemo
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\utils.py", line 394, in _make_clean_directory
+    os.remove(path)
+    ~~~~~~~~~^^^^^^
+PermissionError: [WinError 5] Access is denied: 'd:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI PM\\My Repo\\Final Project Google\\personal_assistant\\dist\\PersonalAssistantDemo'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build.py", line 12, in <module>
+    PyInstaller.__main__.run(options)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\__main__.py", line 215, in run
+    run_build(pyi_config, spec_file, **vars(args))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\__main__.py", line 70, in run_build
+    PyInstaller.building.build_main.main(pyi_config, spec_file, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\build_main.py", line 1275, in main
+    build(specfile, distpath, workpath, clean_build)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\build_main.py", line 1213, in build
+    exec(code, spec_namespace)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\PersonalAssistantDemo.spec", line 43, in <module>
+    coll = COLLECT(
+        exe,
+    ...<5 lines>...
+        name='PersonalAssistantDemo',
+    )
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\api.py", line 1147, in __init__
+    self.__postinit__()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\datastruct.py", line 184, in __postinit__
+    self.assemble()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\api.py", line 1159, in assemble
+    _make_clean_directory(self.name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\utils.py", line 396, in _make_clean_directory
+    _rmtree(path)
+    ~~~~~~~^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\building\utils.py", line 421, in _rmtree
+    shutil.rmtree(path)
+    ~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\shutil.py", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\shutil.py", line 705, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\shutil.py", line 701, in _rmtree_unsafe
+    os.unlink(fullname)
+    ~~~~~~~~~^^^^^^^^^^
+PermissionError: [WinError 5] Access is denied: 'd:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI PM\\My Repo\\Final Project Google\\personal_assistant\\dist\\PersonalAssistantDemo\\_internal\\libffi-8.dll'
+Build Finished.

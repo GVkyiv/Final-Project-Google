@@ -1,12 +1,15 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import cmd
 import difflib
 import shlex
+import sys
+import traceback
 from pathlib import Path
-from typing import List, Optional
+from typing import Callable, List, Optional
 
+from personal_assistant.app.exceptions import PersonalAssistantError
 from personal_assistant.app.models import Contact, Note
 from personal_assistant.app.services import PersonalAssistantService
 
@@ -15,9 +18,10 @@ class AssistantCLI(cmd.Cmd):
     intro = "Personal Assistant CLI\nType 'help' to see commands. Use quotes for values with spaces."
     prompt = "assistant> "
 
-    def __init__(self, service: PersonalAssistantService) -> None:
+    def __init__(self, service: PersonalAssistantService, debug_mode: bool = False) -> None:
         super().__init__()
         self.service = service
+        self.debug_mode = debug_mode
         self.identchars += "-"
         self.commands = sorted(
             [
@@ -61,12 +65,19 @@ class AssistantCLI(cmd.Cmd):
     def _split(arg: str) -> List[str]:
         return shlex.split(arg)
 
-    @staticmethod
-    def _run_parser(parser: argparse.ArgumentParser, tokens: List[str]) -> argparse.Namespace:
+    def _execute_cli(self, parser: argparse.ArgumentParser, arg: str, callback: Callable[[argparse.Namespace], None]) -> None:
         try:
-            return parser.parse_args(tokens)
-        except SystemExit as exc:
-            raise ValueError("Invalid command arguments.") from exc
+            try:
+                args = parser.parse_args(self._split(arg))
+            except SystemExit as exc:
+                raise ValueError("Invalid command arguments.") from exc
+            callback(args)
+        except PersonalAssistantError as exc:
+            print(f"Error: {exc}")
+        except Exception as exc:
+            print(f"Error: {exc}")
+            if self.debug_mode:
+                traceback.print_exc()
 
     @staticmethod
     def _parse_bool(raw: Optional[str]) -> Optional[bool]:
@@ -117,12 +128,11 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--birthday")
         parser.add_argument("--comment")
         parser.add_argument("--favorite", action="store_true")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             first_name = (args.first_name or args.name or "").strip()
             if not first_name:
                 raise ValueError("Provide --first-name (or legacy --name).")
-
             contact = self.service.add_contact(
                 first_name=first_name,
                 last_name=args.last_name,
@@ -137,8 +147,8 @@ class AssistantCLI(cmd.Cmd):
                 favorite=args.favorite,
             )
             print(f"Added contact: {self._format_contact(contact)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_list_contacts(self, arg: str) -> None:
         """list-contacts [--query "john"] [--filter all|favorites|with_birthday|without_birthday] [--sort name|birthday|created|updated]"""
@@ -146,31 +156,31 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--query", default="")
         parser.add_argument("--filter", default="all")
         parser.add_argument("--sort", default="name")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             contacts = self.service.list_contacts(query=args.query, filter_by=args.filter, sort_by=args.sort)
             if not contacts:
                 print("No contacts found.")
                 return
             for idx, contact in enumerate(contacts, start=1):
                 print(f"{idx}. {self._format_contact(contact)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_search_contacts(self, arg: str) -> None:
         """search-contacts --query john"""
         parser = argparse.ArgumentParser(prog="search-contacts", add_help=False)
         parser.add_argument("--query", required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             contacts = self.service.search_contacts(args.query)
             if not contacts:
                 print("No contacts matched.")
                 return
             for idx, contact in enumerate(contacts, start=1):
                 print(f"{idx}. {self._format_contact(contact)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_edit_contact(self, arg: str) -> None:
         """edit-contact --name "John" [--new-name "..."] [--add-phone "..."] [--remove-phone "..."] [--set-email "..."] [--clear-email] [--set-address "..."] [--clear-address] [--set-birthday DD/MM/YYYY] [--clear-birthday] [--set-comment "..."] [--clear-comment] [--favorite on|off]"""
@@ -188,8 +198,8 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--set-comment")
         parser.add_argument("--clear-comment", action="store_true")
         parser.add_argument("--favorite")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             updated = self.service.edit_contact_by_name(
                 name=args.name,
                 new_name=args.new_name,
@@ -206,26 +216,26 @@ class AssistantCLI(cmd.Cmd):
                 favorite=self._parse_bool(args.favorite),
             )
             print(f"Updated contact: {self._format_contact(updated)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_delete_contact(self, arg: str) -> None:
         """delete-contact --name John"""
         parser = argparse.ArgumentParser(prog="delete-contact", add_help=False)
         parser.add_argument("--name", required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             self.service.delete_contact_by_name(args.name)
             print("Contact deleted.")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_birthdays(self, arg: str) -> None:
         """birthdays --days 14"""
         parser = argparse.ArgumentParser(prog="birthdays", add_help=False)
         parser.add_argument("--days", type=int, required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             rows = self.service.upcoming_birthdays(args.days)
             if not rows:
                 print("No upcoming birthdays in this period.")
@@ -233,8 +243,8 @@ class AssistantCLI(cmd.Cmd):
             for idx, row in enumerate(rows, start=1):
                 contact = row["contact"]
                 print(f"{idx}. {self.service.get_contact_display_name(contact)} -> {row['next_birthday']} ({row['days_left']} days)")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_add_note(self, arg: str) -> None:
         """add-note [--title "..."] [--content "..."] [--text "..."] [--tag work] [--pinned] [--favorite] [--color-label blue]"""
@@ -246,8 +256,8 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--pinned", action="store_true")
         parser.add_argument("--favorite", action="store_true")
         parser.add_argument("--color-label", default="default")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             if args.text and not args.title and not args.content:
                 note = self.service.add_note_legacy(args.text, tags=args.tag)
             else:
@@ -262,8 +272,8 @@ class AssistantCLI(cmd.Cmd):
                     color_label=args.color_label,
                 )
             print(f"Added note: {self._format_note(note)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_list_notes(self, arg: str) -> None:
         """list-notes [--query "..."] [--tag "..."] [--filter all|pinned|favorites] [--sort updated|created|title]"""
@@ -272,8 +282,8 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--tag", default="")
         parser.add_argument("--filter", default="all")
         parser.add_argument("--sort", default="updated")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             notes = self.service.list_notes(query=args.query, tag=args.tag, filter_by=args.filter, sort_by=args.sort)
             if not notes:
                 print("No notes found.")
@@ -281,16 +291,16 @@ class AssistantCLI(cmd.Cmd):
             for note in notes:
                 print(self._format_note(note))
                 print("-" * 60)
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_search_notes(self, arg: str) -> None:
         """search-notes [--query "..."] [--tag "..."]"""
         parser = argparse.ArgumentParser(prog="search-notes", add_help=False)
         parser.add_argument("--query")
         parser.add_argument("--tag")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             if not args.query and not args.tag:
                 raise ValueError("Provide at least --query or --tag.")
             notes = self.service.search_notes(query=args.query, tag=args.tag)
@@ -300,8 +310,8 @@ class AssistantCLI(cmd.Cmd):
             for note in notes:
                 print(self._format_note(note))
                 print("-" * 60)
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_edit_note(self, arg: str) -> None:
         """edit-note --id 1 [--title "..."] [--content "..."] [--text "..."] [--tag "..."] [--pinned on|off] [--favorite on|off] [--color-label blue]"""
@@ -314,8 +324,8 @@ class AssistantCLI(cmd.Cmd):
         parser.add_argument("--pinned")
         parser.add_argument("--favorite")
         parser.add_argument("--color-label")
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             note = self.service.get_note(args.id)
             if args.text is not None and args.content is None:
                 args.content = args.text
@@ -329,26 +339,26 @@ class AssistantCLI(cmd.Cmd):
                 color_label=args.color_label if args.color_label is not None else note.color_label,
             )
             print(f"Updated note: {self._format_note(updated)}")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_delete_note(self, arg: str) -> None:
         """delete-note --id 1"""
         parser = argparse.ArgumentParser(prog="delete-note", add_help=False)
         parser.add_argument("--id", type=int, required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             self.service.delete_note(args.id)
             print("Note deleted.")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_sort_notes(self, arg: str) -> None:
         """sort-notes --tag work"""
         parser = argparse.ArgumentParser(prog="sort-notes", add_help=False)
         parser.add_argument("--tag", required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             notes = self.service.sort_notes_by_tag(args.tag)
             if not notes:
                 print("No notes found.")
@@ -356,30 +366,30 @@ class AssistantCLI(cmd.Cmd):
             for note in notes:
                 print(self._format_note(note))
                 print("-" * 60)
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_export_json(self, arg: str) -> None:
         """export-json --path C:\\temp\\export.json"""
         parser = argparse.ArgumentParser(prog="export-json", add_help=False)
         parser.add_argument("--path", required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             self.service.export_json(Path(args.path))
             print("Export completed.")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_import_json(self, arg: str) -> None:
         """import-json --path C:\\temp\\data.json"""
         parser = argparse.ArgumentParser(prog="import-json", add_help=False)
         parser.add_argument("--path", required=True)
-        try:
-            args = self._run_parser(parser, self._split(arg))
+
+        def _handler(args):
             self.service.import_json(Path(args.path))
             print("Import completed.")
-        except Exception as exc:
-            print(f"Error: {exc}")
+
+        self._execute_cli(parser, arg, _handler)
 
     def do_backup(self, arg: str) -> None:
         """Create backup file in backups folder."""
@@ -403,8 +413,9 @@ class AssistantCLI(cmd.Cmd):
 
 
 def main() -> None:
+    debug_mode = "--debug" in sys.argv
     service = PersonalAssistantService()
-    AssistantCLI(service).cmdloop()
+    AssistantCLI(service, debug_mode=debug_mode).cmdloop()
 
 
 if __name__ == "__main__":

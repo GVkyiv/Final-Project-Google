@@ -1,5 +1,5 @@
 ('D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
- 'PM\\My Repo\\Final Project\\build_temp\\PersonalAssistant\\PYZ-00.pyz',
+ 'PM\\My Repo\\Final Project Google\\build_temp\\PersonalAssistant\\PYZ-00.pyz',
  [('__future__',
    'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\__future__.py',
    'PYMODULE'),
@@ -488,75 +488,108 @@
    'PYMODULE'),
   ('personal_assistant',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\__init__.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\__init__.py',
    'PYMODULE'),
   ('personal_assistant.app',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\__init__.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\__init__.py',
+   'PYMODULE'),
+  ('personal_assistant.app.exceptions',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\exceptions.py',
    'PYMODULE'),
   ('personal_assistant.app.models',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\models.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\models.py',
    'PYMODULE'),
   ('personal_assistant.app.services',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\services.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\services.py',
+   'PYMODULE'),
+  ('personal_assistant.app.services_contact',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\app\\services_contact.py',
+   'PYMODULE'),
+  ('personal_assistant.app.services_country',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\app\\services_country.py',
+   'PYMODULE'),
+  ('personal_assistant.app.services_note',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\app\\services_note.py',
+   'PYMODULE'),
+  ('personal_assistant.app.services_settings',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\app\\services_settings.py',
    'PYMODULE'),
   ('personal_assistant.app.storage',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\storage.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\storage.py',
    'PYMODULE'),
   ('personal_assistant.app.theme',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\theme.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\theme.py',
    'PYMODULE'),
   ('personal_assistant.app.translations',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\translations.py',
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\app\\translations.py',
    'PYMODULE'),
   ('personal_assistant.app.utils',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\utils.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\utils.py',
    'PYMODULE'),
   ('personal_assistant.app.validators',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\app\\validators.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\app\\validators.py',
    'PYMODULE'),
   ('personal_assistant.gui',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\gui.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\gui.py',
    'PYMODULE'),
   ('personal_assistant.ui',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\__init__.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\ui\\__init__.py',
    'PYMODULE'),
   ('personal_assistant.ui.app_window',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\app_window.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\ui\\app_window.py',
    'PYMODULE'),
   ('personal_assistant.ui.birthdays_view',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\birthdays_view.py',
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\ui\\birthdays_view.py',
    'PYMODULE'),
   ('personal_assistant.ui.contacts_view',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\contacts_view.py',
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\ui\\contacts_view.py',
    'PYMODULE'),
   ('personal_assistant.ui.dashboard_view',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\dashboard_view.py',
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\ui\\dashboard_view.py',
    'PYMODULE'),
   ('personal_assistant.ui.dialogs',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\dialogs.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\ui\\dialogs.py',
    'PYMODULE'),
   ('personal_assistant.ui.notes_view',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\notes_view.py',
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\ui\\notes_view.py',
+   'PYMODULE'),
+  ('personal_assistant.ui.search_view',
+   'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+   'PM\\My Repo\\Final Project Google\\personal_assistant\\ui\\search_view.py',
    'PYMODULE'),
   ('personal_assistant.ui.settings_view',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\personal_assistant\\ui\\settings_view.py',
+   'PM\\My Repo\\Final Project '
+   'Google\\personal_assistant\\ui\\settings_view.py',
    'PYMODULE'),
   ('pickle',
    'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\pickle.py',

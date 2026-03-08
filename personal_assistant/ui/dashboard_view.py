@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from pathlib import Path
 import tkinter as tk
@@ -23,6 +23,10 @@ class DashboardView(ctk.CTkFrame):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(0, weight=0) # Quick Actions
+        self.grid_rowconfigure(1, weight=0) # Stats
+        self.grid_rowconfigure(2, weight=1) # Bottom (Birthdays + Pinned/Recent)
+        self.grid_rowconfigure(3, weight=1) # New row for the new layout
 
         self._build_layout()
         self.apply_translations()
@@ -31,7 +35,8 @@ class DashboardView(ctk.CTkFrame):
         pad = self.app.ui_tokens.outer_pad
         gap = self.app.ui_tokens.section_gap
 
-        self.quick_frame = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.corner_radius)
+        # Quick Actions Frame
+        self.quick_frame = ctk.CTkFrame(self, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.quick_frame.grid(row=0, column=0, sticky="ew", padx=pad, pady=(pad, gap))
         self.quick_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
@@ -47,13 +52,14 @@ class DashboardView(ctk.CTkFrame):
         for idx, key in enumerate(["add_contact", "add_note", "export_data", "backup"]):
             self.quick_buttons[key].grid(row=1, column=idx, padx=8, pady=(0, 12), sticky="ew")
 
+        # Stats Frame
         self.stats_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.stats_frame.grid(row=1, column=0, sticky="ew", padx=pad, pady=(0, gap))
         self.stats_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         self.stat_labels: dict[str, ctk.CTkLabel] = {}
         for idx, key in enumerate(self.stats_vars):
-            card = ctk.CTkFrame(self.stats_frame, corner_radius=self.app.ui_tokens.corner_radius)
+            card = ctk.CTkFrame(self.stats_frame, corner_radius=self.app.ui_tokens.card_corner_radius)
             card.grid(row=0, column=idx, padx=(0 if idx == 0 else 8, 0), sticky="nsew")
             title = ctk.CTkLabel(card, anchor="w")
             title.pack(fill="x", padx=12, pady=(10, 2))
@@ -61,13 +67,15 @@ class DashboardView(ctk.CTkFrame):
             value.pack(fill="x", padx=12, pady=(0, 10))
             self.stat_labels[key] = title
 
+        # Bottom section (Birthdays, Pinned, Recent)
         self.bottom = ctk.CTkFrame(self, fg_color="transparent")
         self.bottom.grid(row=2, column=0, sticky="nsew", padx=pad, pady=(0, pad))
         self.bottom.grid_columnconfigure(0, weight=2)
         self.bottom.grid_columnconfigure(1, weight=1)
         self.bottom.grid_rowconfigure(0, weight=1)
 
-        self.birthdays_frame = ctk.CTkFrame(self.bottom, corner_radius=self.app.ui_tokens.corner_radius)
+        # Birthdays Frame
+        self.birthdays_frame = ctk.CTkFrame(self.bottom, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.birthdays_frame.grid(row=0, column=0, sticky="nsew", padx=(0, gap))
         self.birthdays_frame.grid_columnconfigure(0, weight=1)
         self.birthdays_frame.grid_rowconfigure(1, weight=1)
@@ -97,13 +105,15 @@ class DashboardView(ctk.CTkFrame):
         self.birthdays_scrollbar.grid(row=0, column=1, sticky="ns", padx=(6, 0))
         self.birthdays_table.configure(yscrollcommand=self.birthdays_scrollbar.set)
 
+        # Right section (Pinned, Recent)
         self.right = ctk.CTkFrame(self.bottom, fg_color="transparent")
         self.right.grid(row=0, column=1, sticky="nsew")
         self.right.grid_rowconfigure(0, weight=1)
         self.right.grid_rowconfigure(1, weight=1)
         self.right.grid_columnconfigure(0, weight=1)
 
-        self.pinned_frame = ctk.CTkFrame(self.right, corner_radius=self.app.ui_tokens.corner_radius)
+        # Pinned Notes Frame
+        self.pinned_frame = ctk.CTkFrame(self.right, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.pinned_frame.grid(row=0, column=0, sticky="nsew", pady=(0, gap))
         self.pinned_frame.grid_columnconfigure(0, weight=1)
         self.pinned_frame.grid_rowconfigure(1, weight=1)
@@ -115,7 +125,8 @@ class DashboardView(ctk.CTkFrame):
         self.pinned_scroll.grid(row=1, column=0, sticky="nsew", padx=10, pady=(0, 10))
         self.pinned_scroll.grid_columnconfigure(0, weight=1)
 
-        self.recent_frame = ctk.CTkFrame(self.right, corner_radius=self.app.ui_tokens.corner_radius)
+        # Recent Records Frame
+        self.recent_frame = ctk.CTkFrame(self.right, corner_radius=self.app.ui_tokens.card_corner_radius)
         self.recent_frame.grid(row=1, column=0, sticky="nsew")
         self.recent_frame.grid_columnconfigure(0, weight=1)
         self.recent_frame.grid_rowconfigure(1, weight=1)
@@ -144,7 +155,7 @@ class DashboardView(ctk.CTkFrame):
         self.birthdays_table.heading("birthday", text=t("birthday"))
         self.birthdays_table.heading("phone", text=t("phone"))
 
-        self.pinned_title.configure(text=t("pinned_notes_count"))
+        self.pinned_title.configure(text=t("pinned_notes"))
         self.recent_title.configure(text=t("recent_records"))
 
     def refresh(self) -> None:

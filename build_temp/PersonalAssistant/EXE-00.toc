@@ -1,6 +1,6 @@
 ('D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
- 'PM\\My Repo\\Final '
- 'Project\\build_temp\\PersonalAssistant\\PersonalAssistant.exe',
+ 'PM\\My Repo\\Final Project '
+ 'Google\\build_temp\\PersonalAssistant\\PersonalAssistant.exe',
  False,
  False,
  True,
@@ -32,37 +32,38 @@
  None,
  None,
  'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
- 'PM\\My Repo\\Final '
- 'Project\\build_temp\\PersonalAssistant\\PersonalAssistant.pkg',
+ 'PM\\My Repo\\Final Project '
+ 'Google\\build_temp\\PersonalAssistant\\PersonalAssistant.pkg',
  [('pyi-contents-directory _internal', '', 'OPTION'),
   ('PYZ-00.pyz',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\build_temp\\PersonalAssistant\\PYZ-00.pyz',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\PYZ-00.pyz',
    'PYZ'),
   ('struct',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final '
-   'Project\\build_temp\\PersonalAssistant\\localpycs\\struct.pyc',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\localpycs\\struct.pyc',
    'PYMODULE'),
   ('pyimod01_archive',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final '
-   'Project\\build_temp\\PersonalAssistant\\localpycs\\pyimod01_archive.pyc',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\localpycs\\pyimod01_archive.pyc',
    'PYMODULE'),
   ('pyimod02_importers',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final '
-   'Project\\build_temp\\PersonalAssistant\\localpycs\\pyimod02_importers.pyc',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\localpycs\\pyimod02_importers.pyc',
    'PYMODULE'),
   ('pyimod03_ctypes',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final '
-   'Project\\build_temp\\PersonalAssistant\\localpycs\\pyimod03_ctypes.pyc',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\localpycs\\pyimod03_ctypes.pyc',
    'PYMODULE'),
   ('pyimod04_pywin32',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final '
-   'Project\\build_temp\\PersonalAssistant\\localpycs\\pyimod04_pywin32.pyc',
+   'PM\\My Repo\\Final Project '
+   'Google\\build_temp\\PersonalAssistant\\localpycs\\pyimod04_pywin32.pyc',
    'PYMODULE'),
   ('pyiboot01_bootstrap',
    'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
@@ -75,12 +76,12 @@
    'PYSOURCE'),
   ('gui',
    'D:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
-   'PM\\My Repo\\Final Project\\gui.py',
+   'PM\\My Repo\\Final Project Google\\gui.py',
    'PYSOURCE')],
  [],
  False,
  False,
- 1772903774,
+ 1772967730,
  [('runw.exe',
    'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw.exe',
    'EXECUTABLE')],

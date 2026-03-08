@@ -1,0 +1,38 @@
+Starting Python Build...
+193 INFO: PyInstaller: 6.19.0, contrib hooks: 2026.2
+194 INFO: Python: 3.14.3
+227 INFO: Platform: Windows-11-10.0.26100-SP0
+227 INFO: Python environment: C:\Users\User\AppData\Local\Python\pythoncore-3.14-64
+228 INFO: wrote d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\PersonalAssistantDemo.spec
+839 INFO: Module search paths (PYTHONPATH):
+['d:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+ 'PM\\My Repo\\Final Project Google\\personal_assistant',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\python314.zip',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\DLLs',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\bin',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64',
+ 'C:\\Users\\User\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages',
+ 'd:\\Documents\\Google Drive\\Cource Google Linkedine Udemy\\Neoversity AI '
+ 'PM\\My Repo\\Final Project Google']
+1291 INFO: Appending 'datas' from .spec
+1295 INFO: checking Analysis
+1370 INFO: checking PYZ
+1394 INFO: checking PKG
+1396 INFO: Bootloader C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+1396 INFO: checking EXE
+1414 INFO: Building because console changed
+1414 INFO: Building EXE from EXE-00.toc
+1415 INFO: Copying bootloader EXE to d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\build\PersonalAssistantDemo\PersonalAssistantDemo.exe
+1527 INFO: Copying icon to EXE
+1588 INFO: Copying 0 resources to EXE
+1588 INFO: Embedding manifest in EXE
+1641 INFO: Appending PKG archive to EXE
+1643 INFO: Fixing EXE headers
+1968 INFO: Building EXE from EXE-00.toc completed successfully.
+1981 INFO: checking COLLECT
+1996 INFO: Removing dir d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\dist\PersonalAssistantDemo
+2005 INFO: Building COLLECT COLLECT-00.toc
+2949 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+2975 INFO: Build complete! The results are available in: d:\Documents\Google Drive\Cource Google Linkedine Udemy\Neoversity AI PM\My Repo\Final Project Google\personal_assistant\dist
+Build Finished.

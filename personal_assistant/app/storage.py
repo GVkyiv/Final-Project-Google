@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 from datetime import datetime
@@ -6,6 +6,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Dict
 
+from .exceptions import StorageError
 from .models import AppData, AppSettings
 
 
@@ -67,6 +68,8 @@ class JsonStorage:
                 temp_path = Path(temp_file.name)
 
             temp_path.replace(path)
+        except OSError as exc:
+            raise StorageError(f"Failed to write file {path}: {exc}") from exc
         finally:
             if temp_path and temp_path.exists():
                 temp_path.unlink(missing_ok=True)
@@ -95,13 +98,13 @@ class JsonStorage:
 
     def import_json(self, source: Path) -> AppData:
         if not source.exists():
-            raise ValueError(f"File does not exist: {source}")
+            raise StorageError(f"File does not exist: {source}")
         try:
             raw = json.loads(source.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
-            raise ValueError(f"Invalid JSON in file: {source}") from exc
+            raise StorageError(f"Invalid JSON in file: {source}") from exc
         if not isinstance(raw, dict):
-            raise ValueError("Imported JSON root must be an object.")
+            raise StorageError("Imported JSON root must be an object.")
         return AppData.from_raw(raw)
 
     def create_backup(self, data: AppData, data_path: Path) -> Path:

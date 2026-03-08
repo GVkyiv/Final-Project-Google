@@ -29,8 +29,15 @@ class AppWindow(ctk.CTk):
         self._lang_map: dict[str, str] = {}
         self._language_updating = False
         self._nav_buttons: dict[str, ctk.CTkButton] = {}
-        self._nav_order = ["dashboard", "contacts", "notes", "birthdays", "search", "settings"]
 
+        self._nav_order = [
+            ("dashboard", "\U0001F3E0"),
+            ("contacts", "\U0001F465"),
+            ("notes", "\U0001F4DD"),
+            ("birthdays", "\U0001F4C5"),
+            ("search", "\U0001F50D"),
+            ("settings", "\u2699\uFE0F"),
+        ]
         self.title(self.t("app_title"))
         self.geometry("1360x840")
         self.minsize(1180, 760)
@@ -60,7 +67,7 @@ class AppWindow(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
-        self.sidebar = ctk.CTkFrame(self, width=230, corner_radius=0)
+        self.sidebar = ctk.CTkFrame(self, width=240, corner_radius=0, fg_color=("#F8FAFC", "#0F172A"))
         self.sidebar.grid(row=0, column=0, rowspan=3, sticky="nsew")
         self.sidebar.grid_propagate(False)
         self.sidebar.grid_rowconfigure(len(self._nav_order) + 1, weight=1)
@@ -68,32 +75,34 @@ class AppWindow(ctk.CTk):
         self.brand_label = ctk.CTkLabel(
             self.sidebar,
             text=self.t("app_title"),
-            font=("Segoe UI Semibold", 20),
-            anchor="w",
+            font=ctk.CTkFont(family="Segoe UI", size=22, weight="bold"),
+            anchor="center",
         )
-        self.brand_label.grid(row=0, column=0, sticky="ew", padx=18, pady=(20, 18))
+        self.brand_label.grid(row=0, column=0, sticky="ew", padx=18, pady=(28, 28))
 
-        for idx, page in enumerate(self._nav_order, start=1):
+        for idx, (page, icon) in enumerate(self._nav_order, start=1):
             button = ctk.CTkButton(
                 self.sidebar,
                 text="",
                 anchor="w",
-                height=40,
+                height=44,
+                font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
                 corner_radius=self.ui_tokens.corner_radius,
                 command=lambda value=page: self.show_page(value),
             )
-            button.grid(row=idx, column=0, sticky="ew", padx=14, pady=(0, 8))
+            button.grid(row=idx, column=0, sticky="ew", padx=16, pady=(0, 10))
             self._nav_buttons[page] = button
 
-        self.topbar = ctk.CTkFrame(self, corner_radius=self.ui_tokens.corner_radius)
+        self.topbar = ctk.CTkFrame(self, fg_color="transparent")
         self.topbar.grid(row=0, column=1, sticky="ew", padx=(gap, pad), pady=(pad, gap))
         self.topbar.grid_columnconfigure(0, weight=1)
 
         self.page_title_label = ctk.CTkLabel(
             self.topbar,
             textvariable=self.page_title_var,
-            font=("Segoe UI Semibold", 24),
+            font=ctk.CTkFont(family="Segoe UI", size=28, weight="bold"),
             anchor="w",
+            text_color=("#0F172A", "#F8FAFC"),
         )
         self.page_title_label.grid(row=0, column=0, sticky="w", padx=(16, 10), pady=12)
 
@@ -132,8 +141,8 @@ class AppWindow(ctk.CTk):
         self.title(self.t("app_title"))
         self.brand_label.configure(text=self.t("app_title"))
 
-        for page in self._nav_order:
-            self._nav_buttons[page].configure(text=self.t(page))
+        for page, icon in self._nav_order:
+            self._nav_buttons[page].configure(text=f"{icon} {self.t(page)}")
 
         self.language_label.configure(text=f"{self.t('language')}:")
 
@@ -157,18 +166,19 @@ class AppWindow(ctk.CTk):
             page.apply_translations()
 
     def _update_nav_state(self) -> None:
+        accent = self.ui_tokens.accent_color
         for page, button in self._nav_buttons.items():
             if page == self.current_page:
                 button.configure(
-                    fg_color=("#2E7EC7", "#1F6AA5"),
+                    fg_color=accent,
                     text_color=("#FFFFFF", "#FFFFFF"),
-                    hover_color=("#2A6EAF", "#17517E"),
+                    hover_color=accent,
                 )
             else:
                 button.configure(
-                    fg_color=("#E4E8EE", "#232A33"),
-                    text_color=("#1A1A1A", "#F0F0F0"),
-                    hover_color=("#D8DEE8", "#2E3642"),
+                    fg_color="transparent",
+                    text_color=("#475569", "#94A3B8"),
+                    hover_color=("#E2E8F0", "#1E293B"),
                 )
 
     def show_page(self, page: str) -> None:
